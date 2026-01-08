@@ -20,7 +20,7 @@ export default async function aiController(req, res) {
       data: response,
     });
   } catch (error) {
-    console.error("AI Controller Error:", error);
+    // console.error("AI Controller Error:", error);
     return res.status(500).json({
       success: false,
       message: "AI service failed",
