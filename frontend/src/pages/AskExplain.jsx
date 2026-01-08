@@ -17,7 +17,7 @@ export default function AskExplain() {
             <h3 className="mb-3">Ask / Explain</h3>
             <div className="flex flex-col gap-3 max-h-105 overflow-auto">
                 {messages.map((m, i) => (
-                    <div key={i} className={`max-w-[75%] p-3 rounded-lg ${m.from === 'user' ? 'self-end bg-linear-to-r from-[#07101a] to-[#0b1220] border border-white/5' : 'self-start bg-white/2 border border-white/5'}`}>{m.text}</div>
+                    <div key={i} className={`max-w-[75%] p-3 rounded-xl ${m.from === 'user' ? 'self-end bg-linear-to-r from-[#07101a] to-[#0b1220] border border-white/5' : 'self-start bg-white/2 border border-white/5'}`}>{m.text}</div>
                 ))}
             </div>
             <div className="flex gap-3 mt-3">

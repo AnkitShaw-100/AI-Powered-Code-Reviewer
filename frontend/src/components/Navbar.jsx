@@ -15,11 +15,11 @@ export default function Navbar({ navItems = [] }) {
 
     return (
         <div className="w-full">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between px-4 py-2 rounded-full">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full text-xl flex items-center justify-center bg-slate-700">CG</div>
+                    <div className="w-11 h-11 rounded-full text-xl flex items-center justify-center text-[#feeb01] font-semibold bg-gray-800">CG</div>
                     <div>
-                        <h1 className="text-sm font-semibold">CodeGuardian</h1>
+                        <h1 className="text-base font-semibold">DeepReview</h1>
                     </div>
                 </div>
 
@@ -28,7 +28,9 @@ export default function Navbar({ navItems = [] }) {
                         <NavLink
                             key={item.path}
                             to={item.path}
-                            className={({ isActive }) => `text-sm px-3 py-1 rounded-md ${isActive ? 'text-white bg-violet-600/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                            className={({ isActive }) => isActive
+                                ? 'text-[#0c1113] bg-[#feeb01] px-3 py-1 rounded-md font-semibold'
+                                : 'text-white px-3 py-1 rounded-md hover:text-[#feeb01] transition-colors font-semibold'}
                         >{item.label}</NavLink>
                     ))}
                 </div>
@@ -47,6 +49,7 @@ export default function Navbar({ navItems = [] }) {
                         </NavLink>
                     ))}
                     <NavLink to="/playground" onClick={() => setOpen(false)} className="block mt-1 px-3 py-2 rounded-md bg-linear-to-r from-violet-500 to-cyan-400 text-[#041025] font-semibold">Try Review</NavLink>
+                    <NavLink to="/playground" onClick={() => setOpen(false)} className="block mt-1 px-3 py-2 rounded-md bg-[#feeb01] text-[#0c1113] font-semibold">Try Review</NavLink>
                 </div>
             </div>
         </div>
