@@ -7,11 +7,20 @@ const app = express();
 // Middleware to parse JSON request bodies
 app.use(express.json());
 
-// Enable CORS for local development
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://saas-code-reviewer.vercel.app",
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "http://localhost:3000",
+    ],
+    credentials: true,
+  })
+);
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.send("Server is running...");
 });
 
 app.use("/ai", aiRoutes);
