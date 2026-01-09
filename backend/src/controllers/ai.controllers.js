@@ -5,14 +5,26 @@ export default async function aiController(req, res) {
     const { code } = req.body;
 
     if (!code) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        message: "Code is required" 
+        message: "Code is required",
       });
     }
 
-    const prompt = `Review the following code and provide feedback on code quality, potential bugs, best practices, and suggestions for improvement:\n\n${code}`;
-    
+    const prompt = `
+Quick code review.
+
+Constraints:
+- Max 80 words
+- Plain text only
+- Bullets only
+- Skip obvious points
+- If no issues, say "No issues found"
+
+Code:
+${code}
+`;
+
     const response = await aiService(prompt);
 
     return res.status(200).json({

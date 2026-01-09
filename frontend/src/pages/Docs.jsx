@@ -1,56 +1,153 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
-const docs = [
-  { id: 'getting-started', title: 'Getting started', body: 'Paste code into the Playground to run a review. Use the Report page to inspect issues and export findings.' },
-  { id: 'best-practices', title: 'Best practices', body: 'Run reviews on PRs and CI. Address critical security issues first and prioritize fixes by impact.' },
-  { id: 'api', title: 'API & Integrations', body: 'Integrate DeepReview into CI pipelines, or use the API to trigger reviews programmatically.' }
+const SECTIONS = [
+  {
+    id: 'overview',
+    title: 'Overview',
+    body: `DeepReview is an AI-powered code review assistant that finds bugs, surfaces best-practices, and suggests improvements. Review single files in the Playground or integrate programmatically via the API.`
+  },
+  {
+    id: 'getting-started',
+    title: 'Getting started',
+    body: `Open the Playground, paste your code, and click 'Run review'. Use the Report page to inspect findings, add comments, and export results.`
+  },
+  {
+    id: 'playground',
+    title: 'Playground',
+    body: `The Playground runs a full AI review and returns categorized findings (bug, security, style, complexity). You can iterate locally before committing changes.`
+  },
+  {
+    id: 'best-practices',
+    title: 'Best practices',
+    body: `Run checks on pull requests, prioritize high-severity issues, and add review suggestions as automated comments in your PR flows.`
+  },
+  {
+    id: 'faq',
+    title: 'FAQ & Troubleshooting',
+    body: `Common issues and tips for using DeepReview effectively.`
+  }
 ]
 
-export default function Docs(){
-  const [active, setActive] = useState(docs[0].id)
+export default function Docs() {
+  const [active, setActive] = useState('overview')
+  const [query] = useState('')
 
-  const content = docs.find(d => d.id === active)
+  const filtered = useMemo(() => {
+    if (!query.trim()) return SECTIONS
+    const q = query.toLowerCase()
+    return SECTIONS.filter(s => s.title.toLowerCase().includes(q) || s.body.toLowerCase().includes(q))
+  }, [query])
+
+  const activeSection = SECTIONS.find(s => s.id === active) || SECTIONS[0]
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-10">
+    <div className="max-w-7xl mx-auto px-6 py-8 min-h-[80vh]">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         <aside className="md:col-span-1">
-          <div className="sticky top-20 space-y-4">
-            <h2 className="text-2xl font-bold text-white">Docs</h2>
-            <nav className="mt-4 flex flex-col gap-2">
-              {docs.map(d => (
+          <div className="sticky top-10 space-y-4">
+            <h2 className="text-3xl font-extrabold text-white">Documentation</h2>
+            <p className="text-slate-400">Everything you need to get the most out of DeepReview.</p>
+
+            <nav className="mt-2 flex flex-col gap-2">
+              {filtered.map(section => (
                 <button
-                  key={d.id}
-                  onClick={() => setActive(d.id)}
-                  className={`text-left px-3 py-2 rounded-md ${active === d.id ? 'bg-[#0c1113] text-white' : 'text-slate-300 hover:bg-[#071014]'}`}>
-                  {d.title}
+                  key={section.id}
+                  onClick={() => setActive(section.id)}
+                  className={`text-left px-4 py-3 rounded-md w-full ${active === section.id ? 'bg-[#feeb01] text-[#0c1113] font-semibold' : 'text-slate-300 hover:bg-[#071014]'}`}>
+                  {section.title}
                 </button>
               ))}
             </nav>
           </div>
         </aside>
 
-        <main className="md:col-span-3 bg-[#071017] border border-white/5 rounded-2xl p-8 text-slate-300">
-          <h3 className="text-2xl text-white font-semibold mb-4">{content.title}</h3>
-          <p className="text-slate-400 mb-6">{content.body}</p>
+        <main className="md:col-span-3 bg-[#141b1b] border border-white/5 rounded-2xl p-6 text-slate-300 min-h-[70vh]">
+          <div className="flex items-start justify-between">
+            <div>
+              <h3 className="text-3xl text-white font-extrabold mb-2">{activeSection.title}</h3>
+              <p className="text-slate-400 max-w-prose">{activeSection.body}</p>
+            </div>
+            <div className="hidden md:block">
+              <div className="text-sm text-slate-400">Version</div>
+              <div className="mt-1 font-semibold text-white">v1.0.0</div>
+            </div>
+          </div>
 
-          {content.id === 'getting-started' && (
-            <section>
-              <h4 className="font-semibold text-white mb-2">Quick example</h4>
-              <pre className="bg-[#061014] p-4 rounded-md text-sm font-mono text-slate-300">{`// paste code in Playground
-function sum(a, b) {
-  return a + b
+          <div className="mt-6 space-y-6">
+            {activeSection.id === 'overview' && (
+              <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-4">
+                  <h4 className="text-white font-semibold mb-2">What DeepReview does</h4>
+                  <ul className="list-disc ml-5 text-slate-300 space-y-1">
+                    <li>Finds bugs and anti-patterns</li>
+                    <li>Suggests fixes and code improvements</li>
+                    <li>Highlights security and performance issues</li>
+                    <li>Integrates with CI and PR workflows</li>
+                  </ul>
+                </div>
+
+                <div className="p-4">
+                  <h4 className="text-white font-semibold mb-2">Use cases</h4>
+                  <p className="text-slate-300">From quick single-file checks to automated PR pipelines, DeepReview adapts to your workflow.</p>
+                </div>
+              </section>
+            )}
+
+            {activeSection.id === 'getting-started' && (
+              <section>
+                <h4 className="text-white font-semibold mb-2">Quick start</h4>
+                <ol className="list-decimal ml-5 text-slate-300 space-y-2">
+                  <li>Open the <strong>Playground</strong>.</li>
+                  <li>Paste a file or snippet and click <em>Run review</em>.</li>
+                  <li>Inspect categorized findings in the Report page.</li>
+                </ol>
+
+                <h5 className="mt-4 text-white font-semibold">Example</h5>
+                <pre className="bg-[#141b1b] p-4 rounded-md text-sm font-mono text-slate-300 mt-2">{`// example.js
+function greet(name) {
+  console.log('Hello, ' + name)
 }`}</pre>
-            </section>
-          )}
+              </section>
+            )}
 
-          {content.id === 'api' && (
-            <section>
-              <h4 className="font-semibold text-white mb-2">API</h4>
-              <p className="text-slate-400 text-sm">POST <code className="bg-[#061014] px-1 rounded text-xs text-slate-200">/ai/review-code</code> with JSON <code className="bg-[#061014] px-1 rounded text-xs text-slate-200">{'{ code: string }'}</code></p>
-            </section>
-          )}
+            {activeSection.id === 'playground' && (
+              <section>
+                <h4 className="text-white font-semibold mb-2">Playground tips</h4>
+                <ul className="list-disc ml-5 text-slate-300 space-y-2">
+                  <li>Include related helper functions for better context.</li>
+                  <li>For large files, focus on specific functions to get concise results.</li>
+                  <li>Use the 'Export' action in Report to save findings.</li>
+                </ul>
+              </section>
+            )}
+
+            {activeSection.id === 'best-practices' && (
+              <section>
+                <h4 className="text-white font-semibold mb-2">Best practices</h4>
+                <ul className="list-disc ml-5 text-slate-300 space-y-2">
+                  <li>Run reviews on PRs and require fixes for high-severity findings.</li>
+                  <li>Use code suggestions as a developer aid — verify automated fixes manually.</li>
+                </ul>
+              </section>
+            )}
+
+            {activeSection.id === 'faq' && (
+              <section>
+                <h4 className="text-white font-semibold mb-2">FAQ</h4>
+                <div className="space-y-3">
+                  <div>
+                    <div className="font-semibold text-white">Why is an item marked as security?</div>
+                    <div className="text-slate-300">We classify patterns that may introduce vulnerabilities (e.g., unsanitized inputs) as security-related.</div>
+                  </div>
+
+                  <div>
+                    <div className="font-semibold text-white">How to reduce noise?</div>
+                    <div className="text-slate-300">Focus reviews on smaller diffs, and tune your CI integration to run only on changed files.</div>
+                  </div>
+                </div>
+              </section>
+            )}
+          </div>
         </main>
       </div>
     </div>
