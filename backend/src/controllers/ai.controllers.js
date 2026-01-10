@@ -15,9 +15,9 @@ export default async function aiController(req, res) {
 Quick code review.
 
 Constraints:
-- Max 80 words
+- Max 200 words
 - Plain text only
-- Bullets only
+- Write in proper bullet format
 - Skip obvious points
 - If no issues, say "No issues found"
 

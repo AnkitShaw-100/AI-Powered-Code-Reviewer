@@ -7,7 +7,7 @@ export default function Pricing() {
     const navigate = useNavigate()
 
     const primaryBtn = 'inline-flex items-center justify-center w-full px-5 py-3 bg-[#feeb01] text-[#0c1113] font-semibold rounded-lg shadow active:opacity-90'
-    
+
     return (
         <div className="max-w-7xl mx-auto px-6 py-8 min-h-[80vh]">
             <div className="flex items-center justify-center mb-6">
